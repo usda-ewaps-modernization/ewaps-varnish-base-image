@@ -1,0 +1,22 @@
+version: '2'
+services:
+  varnish-cache:
+    build: ../.
+    container_name: varnish
+    ports:
+      - "8089:6081"
+    environment:    
+      - VARNISH_BACKEND_ADDRESS=webbackend
+      - VARNISH_BACKEND_PORT=8056
+      - VARNISH_MEMORY=256M
+  
+    restart: always
+
+  web-container:
+    image: "usdaeas/gov-drupal:php56"
+    container_name: webbackend
+    #exposing this port to test varnish bypass access (direct exposure to webbackend)
+    ports: 
+      - "8056:80"
+    restart: always
+  
